@@ -75,6 +75,11 @@ body { background: var(--cream); }
 .summary { background: var(--paper); }
 .empty-state { border-radius: 8px; background: var(--paper); }
 .site-footer { background: #e8ece8; }
+
+@media (max-width: 900px) {
+  .content-wrap { padding-left: 0; }
+  body { overflow-x: hidden; }
+}
 .footer-columns { line-height: 1.8; }
 
 * { box-sizing: border-box; }
