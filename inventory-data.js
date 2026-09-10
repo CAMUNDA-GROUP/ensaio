@@ -1,4 +1,4 @@
-export const products = [
+const products = [
   {
     "id": "inventory-1-178",
     "reference": "178",

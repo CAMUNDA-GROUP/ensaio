@@ -1,6 +1,4 @@
-import { products } from "./inventory-data.js";
-
-const imageBase = `${import.meta.env.BASE_URL}image/`;
+const imageBase = new URL("image/", document.baseURI).href;
 products.forEach((product) => {
   product.image = product.image.replace(/^\/image\//, imageBase);
 });
@@ -39,6 +37,25 @@ const state = {
 
 const app = document.querySelector("#app");
 const t = (key) => translations[state.language][key] || translations.pt[key] || key;
+const uiTranslations = {
+  en: {
+    "Cuidado farmacêutico de confiança": "Trusted pharmacy care", "A sua saúde.": "Your health.", "A nossa prioridade.": "Our priority.", "Comprar produtos →": "Shop products →", "Ver produtos →": "View products →", "Fale connosco": "Contact us", "Resumo do pedido": "Order summary", "Produtos": "Products", "Entrega": "Delivery", "Apoio": "Support", "Cuidado profissional": "Professional care", "Foco no bem-estar": "Wellness focus", "Experiência moderna": "Modern experience", "Encontre o que precisa": "Find what you need", "Explorar produtos": "Explore products", "O que oferecemos": "What we offer", "Serviços farmacêuticos": "Pharmacy services", "Sobre nós": "About us", "Localização e contacto": "Location and contact", "Produtos da farmácia": "Pharmacy products", "Pesquisar catálogo": "Search catalogue", "Comprar": "Buy", "Preço": "Price", "Stock": "Stock", "Carrinho": "Cart", "Total": "Total", "Artigos": "Items", "Subtotal": "Subtotal", "Continuar a comprar": "Continue shopping", "Limpar carrinho": "Clear cart", "Concluir pedido": "Complete order", "Voltar ao topo": "Back to top"
+  },
+  fr: {
+    "Cuidado farmacêutico de confiança": "Soins pharmaceutiques de confiance", "A sua saúde.": "Votre santé.", "A nossa prioridade.": "Notre priorité.", "Comprar produtos →": "Acheter des produits →", "Ver produtos →": "Voir les produits →", "Fale connosco": "Nous contacter", "Resumo do pedido": "Résumé de la commande", "Produtos": "Produits", "Entrega": "Livraison", "Apoio": "Assistance", "Cuidado profissional": "Soins professionnels", "Foco no bem-estar": "Bien-être", "Experiência moderna": "Expérience moderne", "Encontre o que precisa": "Trouvez ce dont vous avez besoin", "Explorar produtos": "Explorer les produits", "O que oferecemos": "Ce que nous proposons", "Serviços farmacêuticos": "Services pharmaceutiques", "Sobre nós": "À propos", "Localização e contacto": "Localisation et contact", "Produtos da farmácia": "Produits de la pharmacie", "Pesquisar catálogo": "Rechercher dans le catalogue", "Comprar": "Acheter", "Preço": "Prix", "Stock": "Stock", "Carrinho": "Panier", "Total": "Total", "Artigos": "Articles", "Subtotal": "Sous-total", "Continuar a comprar": "Continuer les achats", "Limpar carrinho": "Vider le panier", "Concluir pedido": "Valider la commande", "Voltar ao topo": "Retour en haut"
+  }
+};
+function translateUi() {
+  if (state.language === "pt") return;
+  const dictionary = uiTranslations[state.language];
+  const walker = document.createTreeWalker(app, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach((node) => {
+    const key = node.nodeValue.trim();
+    if (dictionary[key]) node.nodeValue = node.nodeValue.replace(key, dictionary[key]);
+  });
+}
 const money = (value) => `${Number(value).toLocaleString("pt-AO")} Kz`;
 function medicationDescription(name) {
   const value = name.toLowerCase();
@@ -96,7 +113,7 @@ function renderHeaderLogo() { return `<a class="site-logo" href="#" data-view="h
 function button(label, action, className = "button button-dark") { return `<button type="button" class="${className}" data-action="${action}">${label}</button>`; }
 
 function productCard(product) {
-  const image = getCachedProductImage(product) || product.image;
+  const image = product.image;
   return `<article class="card product-card" data-product-id="${product.id}"><div class="product-image"><img src="${image}" alt="${escapeHtml(product.name)}" data-product-image ${imageFallback(product.image)}><span class="category-pill">${escapeHtml(product.category)}</span></div><div class="product-body"><div class="product-meta"><div><h3>${escapeHtml(product.name)}</h3></div><span class="stock">${product.stock > 0 ? t("inStock") : t("lowStock")}</span></div><p class="product-description">${escapeHtml(medicationDescription(product.name))}</p><div class="product-bottom"><div><p class="price-label">${t("price")}</p><p class="price">${money(product.price)}</p></div>${button(t("details"), `details:${product.id}`, "button button-outline")}</div>${button(`🛒 ${t("add")}`, `add:${product.id}`, "button button-dark button-full")}</div></article>`;
 }
 
@@ -198,8 +215,8 @@ function render() {
   const views = { home: renderHome, products: renderProducts, details: renderDetails, cart: renderCart, checkout: renderCheckout, services: renderServices, about: renderAbout, contact: renderContact };
   const page = views[state.view]().replaceAll("/image/", imageBase);
   app.innerHTML = `${renderHeaderLogo()}${renderLanguage()}${renderNav()}<div class="content-wrap">${page}${renderFooter()}</div>${renderDrawer()}<a class="floating-whatsapp" href="https://wa.me/?text=${encodeURIComponent("Olá Farmacia Camunda Central, gostaria de fazer um pedido.")}" target="_blank" rel="noreferrer" aria-label="Pedido por WhatsApp">◔</a>`;
+  translateUi();
   startHeroSlideshow();
-  window.setTimeout(hydrateProductImages, 0);
 }
 
 let heroSlideTimer;
