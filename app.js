@@ -1,5 +1,10 @@
 import { products } from "./inventory-data.js";
 
+const imageBase = `${import.meta.env.BASE_URL}image/`;
+products.forEach((product) => {
+  product.image = product.image.replace(/^\/image\//, imageBase);
+});
+
 const services = [
   ["✚", "Consulta farmacêutica", "Orientação profissional sobre produtos de saúde e apoio aos pedidos."],
   ["✓", "Apoio a receitas", "Apoio organizado para validação e acompanhamento de produtos sujeitos a receita."],
@@ -10,8 +15,8 @@ const services = [
 ];
 
 const heroSlides = [
-  ["/image/backgroud1.png", "/image/background2.jpg", "/image/backgroud3.png"],
-  ["/image/background4.png", "/image/background5.png", "/image/background6.png"],
+  [`${imageBase}backgroud1.png`, `${imageBase}background2.jpg`, `${imageBase}backgroud3.png`],
+  [`${imageBase}background4.png`, `${imageBase}background5.png`, `${imageBase}background6.png`],
 ];
 
 const translations = {
@@ -78,7 +83,7 @@ function readCart() {
   try { return JSON.parse(localStorage.getItem("camunda-central-cart") || "[]"); } catch { return []; }
 }
 function saveCart() { localStorage.setItem("camunda-central-cart", JSON.stringify(state.cart)); }
-function imageFallback(image) { return `onerror="this.onerror=null;this.src='/image/background6.png'"`; }
+function imageFallback(image) { return `onerror="this.onerror=null;this.src='${imageBase}background6.png'"`; }
 function navItems() { return [["home", "⌂", t("home")], ["products", "▦", t("products")], ["services", "♡", t("services")], ["about", "▥", t("about")], ["contact", "✉", t("contact")], ["cart", "🛒", t("cart")]]; }
 
 function renderNav() {
@@ -87,7 +92,7 @@ function renderNav() {
 }
 
 function renderLanguage() { return `<div class="language-switcher" aria-label="Escolher idioma">${["pt", "en", "fr"].map((lang) => `<button data-language="${lang}" class="${state.language === lang ? "active" : ""}">${lang}</button>`).join("")}</div>`; }
-function renderHeaderLogo() { return `<a class="site-logo" href="#" data-view="home" aria-label="Farmacia Camunda Central"><img src="/image/logo2.png" alt="Farmacia Camunda Central"></a>`; }
+function renderHeaderLogo() { return `<a class="site-logo" href="#" data-view="home" aria-label="Farmacia Camunda Central"><img src="${imageBase}logo2.png" alt="Farmacia Camunda Central"></a>`; }
 function button(label, action, className = "button button-dark") { return `<button type="button" class="${className}" data-action="${action}">${label}</button>`; }
 
 function productCard(product) {
@@ -191,7 +196,8 @@ function render() {
   document.body.classList.remove("view-home", "view-products", "view-details", "view-cart", "view-checkout", "view-services", "view-about", "view-contact");
   document.body.classList.add(`view-${state.view}`);
   const views = { home: renderHome, products: renderProducts, details: renderDetails, cart: renderCart, checkout: renderCheckout, services: renderServices, about: renderAbout, contact: renderContact };
-  app.innerHTML = `${renderHeaderLogo()}${renderLanguage()}${renderNav()}<div class="content-wrap">${views[state.view]()}${renderFooter()}</div>${renderDrawer()}<a class="floating-whatsapp" href="https://wa.me/?text=${encodeURIComponent("Olá Farmacia Camunda Central, gostaria de fazer um pedido.")}" target="_blank" rel="noreferrer" aria-label="Pedido por WhatsApp">◔</a>`;
+  const page = views[state.view]().replaceAll("/image/", imageBase);
+  app.innerHTML = `${renderHeaderLogo()}${renderLanguage()}${renderNav()}<div class="content-wrap">${page}${renderFooter()}</div>${renderDrawer()}<a class="floating-whatsapp" href="https://wa.me/?text=${encodeURIComponent("Olá Farmacia Camunda Central, gostaria de fazer um pedido.")}" target="_blank" rel="noreferrer" aria-label="Pedido por WhatsApp">◔</a>`;
   startHeroSlideshow();
   window.setTimeout(hydrateProductImages, 0);
 }
