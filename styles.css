@@ -27,6 +27,10 @@
 
 body { background: var(--cream); }
 .content-wrap { padding-left: 104px; }
+@media (max-width: 900px) {
+  .content-wrap { padding-left: 0; }
+  body { overflow-x: hidden; }
+}
 .hero { min-height: 610px; border-radius: 0; }
 .hero-gallery { gap: 1px; }
 .hero-gallery::after { background: linear-gradient(90deg, rgba(15,29,33,.82), rgba(15,29,33,.34) 62%, rgba(15,29,33,.18)); }
@@ -457,3 +461,8 @@ body { background: var(--cream); }
 .fact { border-radius: 6px; }
 .summary, .empty-state { background: var(--paper); }
 .site-footer { background: #e8ece8; }
+
+@media (max-width: 900px) {
+  .content-wrap { padding-left: 0; }
+  body { overflow-x: hidden; }
+}
