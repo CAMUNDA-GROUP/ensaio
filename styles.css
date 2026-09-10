@@ -402,6 +402,7 @@ img { display: block; max-width: 100%; }
   .hero-gallery { grid-template-columns: 1fr; }
   .hero-gallery img { display: none; }
   .hero-gallery img:first-child { display: block; }
+  .floating-whatsapp { bottom: 72px; }
   .hero-copy > p:not(.eyebrow) { font-size: 14px; }
   .section, .page { padding: 48px 16px 80px; }
   .section-heading { display: block; }

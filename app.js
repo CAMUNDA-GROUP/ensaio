@@ -1,6 +1,7 @@
 const imageBase = new URL("image/", document.baseURI).href;
 products.forEach((product) => {
   product.image = product.image.replace(/^\/image\//, imageBase);
+  product.image = `${imageBase}medicamento.png`;
 });
 
 const services = [
@@ -221,12 +222,30 @@ function render() {
 
 let heroSlideTimer;
 let activeHeroSlide = 0;
+let activeMobileHeroSlide = 0;
 function startHeroSlideshow() {
   clearInterval(heroSlideTimer);
+  const isMobile = window.matchMedia("(max-width: 620px)").matches;
+  const mobileSlides = heroSlides.flat();
+  if (isMobile) {
+    const mobileGallery = document.querySelector(".hero-gallery");
+    const mobileImage = mobileGallery?.querySelector("img");
+    if (mobileImage) mobileImage.src = mobileSlides[activeMobileHeroSlide];
+  }
   heroSlideTimer = setInterval(() => {
     const gallery = document.querySelector(".hero-gallery");
     const images = gallery?.querySelectorAll("img");
     if (!gallery || !images || images.length !== 3) return;
+
+    if (window.matchMedia("(max-width: 620px)").matches) {
+      activeMobileHeroSlide = (activeMobileHeroSlide + 1) % mobileSlides.length;
+      gallery.classList.add("slide-changing");
+      window.setTimeout(() => {
+        images[0].src = mobileSlides[activeMobileHeroSlide];
+        gallery.classList.remove("slide-changing");
+      }, 350);
+      return;
+    }
 
     activeHeroSlide = (activeHeroSlide + 1) % heroSlides.length;
     gallery.classList.add("slide-changing");
@@ -236,7 +255,7 @@ function startHeroSlideshow() {
       });
       gallery.classList.remove("slide-changing");
     }, 350);
-  }, 12000);
+  }, isMobile ? 8000 : 12000);
 }
 
 function navigate(view) {
