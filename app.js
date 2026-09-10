@@ -214,7 +214,7 @@ function render() {
   document.body.classList.remove("view-home", "view-products", "view-details", "view-cart", "view-checkout", "view-services", "view-about", "view-contact");
   document.body.classList.add(`view-${state.view}`);
   const views = { home: renderHome, products: renderProducts, details: renderDetails, cart: renderCart, checkout: renderCheckout, services: renderServices, about: renderAbout, contact: renderContact };
-  const page = views[state.view]().replaceAll("/image/", imageBase);
+  const page = views[state.view]().replaceAll('src="/image/', `src="${imageBase}`);
   app.innerHTML = `${renderHeaderLogo()}${renderLanguage()}${renderNav()}<div class="content-wrap">${page}${renderFooter()}</div>${renderDrawer()}<a class="floating-whatsapp" href="https://wa.me/?text=${encodeURIComponent("Olá Farmacia Camunda Central, gostaria de fazer um pedido.")}" target="_blank" rel="noreferrer" aria-label="Pedido por WhatsApp">◔</a>`;
   translateUi();
   startHeroSlideshow();
