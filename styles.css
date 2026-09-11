@@ -56,6 +56,17 @@ body { background: var(--cream); }
   .whatsapp-panel { right: 16px !important; bottom: 138px !important; }
 }
 
+@media (max-width: 620px) {
+  html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+  .content-wrap, main, .section, .page, .card, .about-band, .about-band > *, .info-panel, .feature-card, .product-card, .product-list-item, .detail-card, .checkout-card, .summary, .site-footer { min-width: 0; max-width: 100%; }
+  .about-band > * { width: 100%; }
+  .about-band h2, .about-band p, .card h1, .card h2, .card h3, .card p, .footer-brand p, .footer-columns span { overflow-wrap: anywhere; word-break: normal; }
+  .footer-columns { grid-template-columns: 1fr; gap: 20px; }
+  .product-list-copy, .product-list-meta, .cart-item-main, .drawer-item-main { min-width: 0; max-width: 100%; }
+  .product-list-meta { flex-wrap: wrap; }
+  .hero-copy, .hero-copy > p:not(.eyebrow), .hero h1 { max-width: 100%; min-width: 0; }
+}
+
 /* Final WhatsApp button treatment */
 .floating-whatsapp { position: fixed; z-index: 95; right: 24px; bottom: 24px; display: inline-flex; align-items: center; justify-content: center; width: auto; min-width: 178px; height: 56px; padding: 0 20px; gap: 10px; border: 1px solid rgba(255,255,255,.72); border-radius: 10px; background: #173b35; color: #fff; box-shadow: 0 12px 28px rgba(23,59,53,.28); font-size: 13px; font-weight: 700; letter-spacing: .02em; }
 .floating-whatsapp:hover, .floating-whatsapp.active { background: #286552; transform: translateY(-2px); }
@@ -190,8 +201,8 @@ img { display: block; max-width: 100%; }
 .hero-gallery::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,23,42,.78), rgba(15,23,42,.25) 55%, rgba(15,23,42,.5)); }
 .hero-gallery img { width: 100%; height: 100%; min-width: 0; object-fit: cover; filter: saturate(.75); }
 .hero-gallery img:first-child { object-position: center; }
-.hero-gallery { transition: opacity .35s ease; }
-.hero-gallery.slide-changing { opacity: .2; }
+.hero-gallery { transition: none; }
+.hero-gallery.slide-changing { opacity: 1; }
 .hero-inner { position: relative; z-index: 1; display: flex; align-items: end; justify-content: space-between; width: 100%; max-width: 1440px; margin: 0 auto; padding: 70px 40px 56px; }
 .site-idle .hero-inner, .site-idle .hero-summary { opacity: 0; pointer-events: none; }
 .hero-inner, .content-wrap > main:not(:has(.hero)), .content-wrap > main > .section, .site-footer, .floating-whatsapp { transition: opacity .3s ease; }
