@@ -259,24 +259,16 @@ function startHeroSlideshow() {
 
     if (window.matchMedia("(max-width: 620px)").matches) {
       activeMobileHeroSlide = (activeMobileHeroSlide + 1) % mobileSlides.length;
-      gallery.classList.add("slide-changing");
-      window.setTimeout(() => {
-        images[0].src = mobileSlides[activeMobileHeroSlide];
-        updateHeroCopy(heroSlides[activeMobileHeroSlide < 3 ? 0 : 1]);
-        gallery.classList.remove("slide-changing");
-      }, 350);
+      images[0].src = mobileSlides[activeMobileHeroSlide];
+      updateHeroCopy(heroSlides[activeMobileHeroSlide < 3 ? 0 : 1]);
       return;
     }
 
     activeHeroSlide = (activeHeroSlide + 1) % heroSlides.length;
-    gallery.classList.add("slide-changing");
-    window.setTimeout(() => {
-      heroSlides[activeHeroSlide].images.forEach((source, index) => {
-        images[index].src = source;
-      });
-      updateHeroCopy(heroSlides[activeHeroSlide]);
-      gallery.classList.remove("slide-changing");
-    }, 350);
+    heroSlides[activeHeroSlide].images.forEach((source, index) => {
+      images[index].src = source;
+    });
+    updateHeroCopy(heroSlides[activeHeroSlide]);
   }, isMobile ? 8000 : 12000);
 }
 
