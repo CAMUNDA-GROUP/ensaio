@@ -236,8 +236,7 @@ function summary(primary, action, delivery = 0) { return `<aside class="card sum
 
 function checkoutField(name, fallback = "") { return escapeHtml(state.checkoutDraft[name] || fallback); }
 function prescriptionUpload() {
-  const fileName = state.prescriptionFile ? escapeHtml(state.prescriptionFile.name) : "Escolher ficheiro";
-  return `<section class="prescription-upload"><p class="form-title">Receita médica</p><p>Envie uma foto da receita para o farmacêutico.</p><label class="file-picker" for="prescription-file"><span>${fileName}</span></label><input id="prescription-file" class="file-input" type="file" name="prescription" accept="image/*"><small>Após a compra ser confirmada, a imagem será encaminhada para o WhatsApp em 10 segundos.</small></section>`;
+  return `<section class="prescription-upload"><p class="form-title">Receita médica</p><p>Você pode enviar a sua Receita para o nosso farmacêutico. Assim poderá receber rapidamente o seu medicamento.</p></section>`;
 }
 
 function renderCheckout() {
@@ -376,6 +375,7 @@ async function submitCheckout(form) {
     return;
   }
   state.deliveryCity = form.elements.city.value.trim();
+  state.checkoutDraft.fullName = form.elements.fullName.value.trim();
   state.submittingOrder = true;
   const orderNumber = `KP-${Math.floor(Math.random() * 9000 + 1000)}`;
   const formData = new FormData(form);
@@ -390,7 +390,6 @@ async function submitCheckout(form) {
     formData.append("receipt_filename", state.receiptFile.name);
     formData.append("receipt_notice", "Comprovativo selecionado no checkout; enviar pelo WhatsApp para validação.");
   }
-  formData.delete("prescription");
 
   try {
     const response = await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
@@ -411,7 +410,7 @@ async function submitCheckout(form) {
 }
 
 function schedulePrescriptionWhatsApp() {
-  if (!state.prescriptionFile || prescriptionWhatsappScheduled) return;
+  if (prescriptionWhatsappScheduled) return;
   prescriptionWhatsappScheduled = true;
   prescriptionWhatsappTimer = setTimeout(() => {
     sendPrescriptionToPharmacist(true);
@@ -419,16 +418,7 @@ function schedulePrescriptionWhatsApp() {
 }
 
 async function sendPrescriptionToPharmacist(autoOpen = false) {
-  if (!state.prescriptionFile) return;
-  const message = `Olá, sou ${state.checkoutDraft.fullName || "cliente da Farmácia Camunda"}. Vou enviar a foto da minha receita para análise do farmacêutico.`;
-  if (navigator.share && navigator.canShare?.({ files: [state.prescriptionFile] })) {
-    try {
-      await navigator.share({ title: "Receita médica", text: message, files: [state.prescriptionFile] });
-      return;
-    } catch (error) {
-      if (error.name === "AbortError") return;
-    }
-  }
+  const message = `Olá, Sou ${state.checkoutDraft.fullName || "cliente da Farmácia Camunda"}. Vou enviar a foto da minha receita para análise do farmacêutico.`;
   window.open(`https://wa.me/244931898121?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
   if (!autoOpen) alert("O WhatsApp foi aberto. Anexe a foto da receita na conversa com o farmacêutico.");
 }
@@ -463,7 +453,6 @@ document.addEventListener("click", (event) => {
     }
     return;
   }
-  if (target.dataset.sendPrescription !== undefined) { sendPrescriptionToPharmacist(); return; }
   if (target.dataset.action?.startsWith("details:")) { state.selected = productById(target.dataset.action.split(":")[1]); state.quantity = 1; navigate("details"); return; }
   if (target.dataset.action?.startsWith("add:")) return addToCart(target.dataset.action.split(":")[1]);
   if (target.dataset.action?.startsWith("add-detail:")) return addToCart(target.dataset.action.split(":")[1], state.quantity);
@@ -476,11 +465,6 @@ document.addEventListener("click", (event) => {
 document.addEventListener("change", (event) => {
   if (event.target.matches("[name=receipt]")) {
     state.receiptFile = event.target.files?.[0] || null;
-    render();
-    return;
-  }
-  if (event.target.matches("[name=prescription]")) {
-    state.prescriptionFile = event.target.files?.[0] || null;
     render();
     return;
   }
