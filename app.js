@@ -50,12 +50,13 @@ const app = document.querySelector("#app");
 const t = (key) => translations[state.language][key] || translations.pt[key] || key;
 const uiTranslations = {
   en: {
-    "Cuidado farmacêutico de confiança": "Trusted pharmacy care", "A sua saúde.": "Your health.", "A nossa prioridade.": "Our priority.", "Comprar produtos →": "Shop products →", "Ver produtos →": "View products →", "Fale connosco": "Contact us", "Resumo do pedido": "Order summary", "Produtos": "Products", "Entrega": "Delivery", "Apoio": "Support", "Cuidado profissional": "Professional care", "Foco no bem-estar": "Wellness focus", "Experiência moderna": "Modern experience", "Encontre o que precisa": "Find what you need", "Explorar produtos": "Explore products", "O que oferecemos": "What we offer", "Serviços farmacêuticos": "Pharmacy services", "Sobre nós": "About us", "Localização e contacto": "Location and contact", "Produtos da farmácia": "Pharmacy products", "Pesquisar catálogo": "Search catalogue", "Comprar": "Buy", "Preço": "Price", "Stock": "Stock", "Carrinho": "Cart", "Total": "Total", "Artigos": "Items", "Subtotal": "Subtotal", "Continuar a comprar": "Continue shopping", "Limpar carrinho": "Clear cart", "Concluir pedido": "Complete order", "Voltar ao topo": "Back to top"
+    "Cuidado farmacêutico de confiança": "Trusted pharmacy care", "Farmacia Camunda Central": "Farmacia Camunda Central", "A sua saúde.": "Your health.", "A nossa prioridade.": "Our priority.", "Produtos de saúde, apoio ao bem-estar e soluções farmacêuticas modernas para toda a família.": "Health products, wellness support and modern pharmacy solutions for the whole family.", "Comprar produtos →": "Shop products →", "Ver produtos →": "View products →", "Fale connosco": "Contact us", "Entregas em Angola": "Deliveries in Angola", "Saúde à sua porta": "Health at your door", "Cuidamos de si.": "We care for you.", "Onde estiver.": "Wherever you are.", "Entregas de porta em porta em Benguela, Lobito e Luanda, com atendimento próximo e seguro 24/7.": "Door-to-door deliveries in Benguela, Lobito and Luanda, with close and reliable 24/7 service.", "Resumo do pedido": "Order summary", "Produtos": "Products", "Entrega": "Delivery", "Apoio": "Support", "Cuidado profissional": "Professional care", "Foco no bem-estar": "Wellness focus", "Experiência moderna": "Modern experience", "Encontre o que precisa": "Find what you need", "Explorar produtos": "Explore products", "O que oferecemos": "What we offer", "Serviços farmacêuticos": "Pharmacy services", "Sobre nós": "About us", "Localização e contacto": "Location and contact", "Produtos da farmácia": "Pharmacy products", "Pesquisar catálogo": "Search catalogue", "Comprar": "Buy", "Preço": "Price", "Stock": "Stock", "Carrinho": "Cart", "Total": "Total", "Artigos": "Items", "Subtotal": "Subtotal", "Continuar a comprar": "Continue shopping", "Limpar carrinho": "Clear cart", "Concluir pedido": "Complete order", "Voltar ao topo": "Back to top"
   },
   fr: {
-    "Cuidado farmacêutico de confiança": "Soins pharmaceutiques de confiance", "A sua saúde.": "Votre santé.", "A nossa prioridade.": "Notre priorité.", "Comprar produtos →": "Acheter des produits →", "Ver produtos →": "Voir les produits →", "Fale connosco": "Nous contacter", "Resumo do pedido": "Résumé de la commande", "Produtos": "Produits", "Entrega": "Livraison", "Apoio": "Assistance", "Cuidado profissional": "Soins professionnels", "Foco no bem-estar": "Bien-être", "Experiência moderna": "Expérience moderne", "Encontre o que precisa": "Trouvez ce dont vous avez besoin", "Explorar produtos": "Explorer les produits", "O que oferecemos": "Ce que nous proposons", "Serviços farmacêuticos": "Services pharmaceutiques", "Sobre nós": "À propos", "Localização e contacto": "Localisation et contact", "Produtos da farmácia": "Produits de la pharmacie", "Pesquisar catálogo": "Rechercher dans le catalogue", "Comprar": "Acheter", "Preço": "Prix", "Stock": "Stock", "Carrinho": "Panier", "Total": "Total", "Artigos": "Articles", "Subtotal": "Sous-total", "Continuar a comprar": "Continuer les achats", "Limpar carrinho": "Vider le panier", "Concluir pedido": "Valider la commande", "Voltar ao topo": "Retour en haut"
+    "Cuidado farmacêutico de confiança": "Soins pharmaceutiques de confiance", "Farmacia Camunda Central": "Farmacia Camunda Central", "A sua saúde.": "Votre santé.", "A nossa prioridade.": "Notre priorité.", "Produtos de saúde, apoio ao bem-estar e soluções farmacêuticas modernas para toda a família.": "Produits de santé, soutien au bien-être et solutions pharmaceutiques modernes pour toute la famille.", "Comprar produtos →": "Acheter des produits →", "Ver produtos →": "Voir les produits →", "Fale connosco": "Nous contacter", "Entregas em Angola": "Livraisons en Angola", "Saúde à sua porta": "La santé à votre porte", "Cuidamos de si.": "Nous prenons soin de vous.", "Onde estiver.": "Où que vous soyez.", "Entregas de porta em porta em Benguela, Lobito e Luanda, com atendimento próximo e seguro 24/7.": "Livraisons à Benguela, Lobito et Luanda, avec un service proche et fiable 24/7.", "Resumo do pedido": "Résumé de la commande", "Produtos": "Produits", "Entrega": "Livraison", "Apoio": "Assistance", "Cuidado profissional": "Soins professionnels", "Foco no bem-estar": "Bien-être", "Experiência moderna": "Expérience moderne", "Encontre o que precisa": "Trouvez ce dont vous avez besoin", "Explorar produtos": "Explorer les produits", "O que oferecemos": "Ce que nous proposons", "Serviços farmacêuticos": "Services pharmaceutiques", "Sobre nós": "À propos", "Localização e contacto": "Localisation et contact", "Produtos da farmácia": "Produits de la pharmacie", "Pesquisar catálogo": "Rechercher dans le catalogue", "Comprar": "Acheter", "Preço": "Prix", "Stock": "Stock", "Carrinho": "Panier", "Total": "Total", "Artigos": "Articles", "Subtotal": "Sous-total", "Continuar a comprar": "Continuer les achats", "Limpar carrinho": "Vider le panier", "Concluir pedido": "Valider la commande", "Voltar ao topo": "Retour en haut"
   }
 };
+function translateText(text) { return state.language === "pt" ? text : uiTranslations[state.language]?.[text] || text; }
 function translateUi() {
   if (state.language === "pt") return;
   const dictionary = uiTranslations[state.language];
@@ -225,7 +226,7 @@ function renderDrawer() {
 }
 
 function renderMessagePanel() {
-  return `<div class="whatsapp-panel ${state.messageOpen ? "open" : ""}" role="dialog" aria-label="Enviar mensagem para a Farmacia Camunda Entregas"><div class="whatsapp-panel-head"><div><span class="whatsapp-status"></span><strong>Farmacia Camunda Entregas</strong><small>Resposta rápida · aberto 24/7</small></div><button type="button" class="whatsapp-close" data-action="close-message" aria-label="Fechar mensagem">×</button></div><form data-whatsapp-form><label for="whatsapp-message">Mensagem</label><textarea id="whatsapp-message" name="message" required placeholder="Olá, gostaria de fazer um pedido...">Olá, gostaria de fazer um pedido.</textarea><button type="submit" class="whatsapp-send">Escrever para o Gestor <span>↗</span></button><small class="whatsapp-contact">931 898 121 · Benguela · Lobito · Luanda</small></form></div><button type="button" class="floating-whatsapp ${state.messageOpen ? "active" : ""}" data-action="toggle-message" aria-label="Enviar mensagem pelo WhatsApp"><span class="whatsapp-symbol">◔</span><span>Mensagem</span></button>`;
+  return `<div class="whatsapp-panel ${state.messageOpen ? "open" : ""}" role="dialog" aria-label="Enviar mensagem para a Farmacia Camunda Entregas"><div class="whatsapp-panel-head"><div><span class="whatsapp-status"></span><strong>Farmacia Camunda Entregas</strong><small>Resposta rápida · aberto 24/7</small></div><button type="button" class="whatsapp-close" data-action="close-message" aria-label="Fechar mensagem">×</button></div><form data-whatsapp-form><label for="whatsapp-message">Mensagem</label><textarea id="whatsapp-message" name="message" required placeholder="Olá, gostaria de fazer um pedido...">Olá, gostaria de fazer um pedido.</textarea><button type="submit" class="whatsapp-send">Escrever para o Gestor <span>↗</span></button><small class="whatsapp-contact">931 898 121 · Benguela · Lobito · Luanda</small></form></div><div class="whatsapp-hint" role="status" aria-live="polite">🧐 Precisa de orientação? Estamos aqui para ajudar.</div><button type="button" class="floating-whatsapp ${state.messageOpen ? "active" : ""}" data-action="toggle-message" aria-label="Enviar mensagem pelo WhatsApp"><span class="whatsapp-symbol">◔</span><span>Mensagem</span></button>`;
 }
 
 function renderFooter() { return `<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>Farmacia Camunda Central</strong><p>Cuidados de saúde de confiança em Benguela e Luanda.</p></div><div class="footer-columns"><div><h4>Ligações rápidas</h4><button data-view="products">Produtos</button><button data-view="services">Serviços</button><button data-view="contact">Contacto</button></div><div><h4>Localização</h4><span>Benguela · Lobito · Luanda</span></div><div><h4>Redes sociais</h4><span>Instagram</span><span>Facebook</span><span>LinkedIn</span></div></div></div><div class="footer-bottom"><span>© 2026 Farmacia Camunda Central</span><span>Profissional. Próxima. De confiança.</span><button type="button" class="scroll-top-button" data-action="scroll-top">↑ Voltar ao topo</button></div></footer>`; }
@@ -236,23 +237,37 @@ function render() {
   document.body.classList.add(`view-${state.view}`);
   const views = { home: renderHome, products: renderProducts, details: renderDetails, cart: renderCart, checkout: renderCheckout, services: renderServices, about: renderAbout, contact: renderContact };
   const page = views[state.view]().replaceAll('src="/image/', `src="${imageBase}`).replaceAll("Contacto a confirmar", "931 898 121 / 934 309 944").replaceAll("Telefone a confirmar", "931 898 121 / 934 309 944").replaceAll("WhatsApp a confirmar", "").replaceAll("E-mail a confirmar", "farmaciacamundagroup@gmail.com").replaceAll("<p></p>", "");
-  const footer = renderFooter().replace(/<button type="button" class="scroll-top-button"[^>]*>.*?<\/button>/, "").replace("<span>Instagram</span><span>Facebook</span><span>LinkedIn</span>", "<a class=\"social-icon social-facebook\" href=\"#\" aria-label=\"Facebook\">f</a><a class=\"social-icon social-instagram\" href=\"#\" aria-label=\"Instagram\">◎</a><a class=\"social-icon social-x\" href=\"#\" aria-label=\"X\">X</a>").replaceAll("Cuidados de saúde de confiança em Benguela e Luanda.", "A número um em Angola a entregar saúde à porta dos Angolanos.").replaceAll("Benguela e Luanda", "Benguela · Lobito · Luanda").replaceAll("Contacto a confirmar", "931 898 121 / 934 309 944").replaceAll("Telefone a confirmar", "931 898 121 / 934 309 944").replaceAll("WhatsApp a confirmar", "").replaceAll("E-mail a confirmar", "farmaciacamundagroup@gmail.com").replaceAll("<p></p>", "");
+  const footer = renderFooter().replace(/<button type="button" class="scroll-top-button"[^>]*>.*?<\/button>/, "").replace("<span>Instagram</span><span>Facebook</span><span>LinkedIn</span>", "<a class=\"social-icon social-facebook\" href=\"https://www.facebook.com/profile.php?id=61593911743443\" aria-label=\"Facebook\">f</a><a class=\"social-icon social-instagram\" href=\"https://www.instagram.com/farmacia_camunda_central?stkn=cTA4aTRjbHM4bWow\" aria-label=\"Instagram\">◎</a><a class=\"social-icon social-x\" href=\"https://x.com/FarmciaCamwv0\" aria-label=\"X\">X</a>").replaceAll("Cuidados de saúde de confiança em Benguela e Luanda.", "A número um em Angola a entregar saúde à porta dos Angolanos.").replaceAll("Benguela e Luanda", "Benguela · Lobito · Luanda").replaceAll("Contacto a confirmar", "931 898 121 / 934 309 944").replaceAll("Telefone a confirmar", "931 898 121 / 934 309 944").replaceAll("WhatsApp a confirmar", "").replaceAll("E-mail a confirmar", "farmaciacamundagroup@gmail.com").replaceAll("<p></p>", "");
   app.innerHTML = `${renderHeaderLogo()}${renderLanguage()}${renderNav()}<div class="content-wrap">${page}${footer}</div>${renderDrawer()}${renderMessagePanel()}`;
   translateUi();
   startHeroSlideshow();
+  scheduleMessageHint();
 }
 
 let heroSlideTimer;
 let activeHeroSlide = 0;
 let activeMobileHeroSlide = 0;
+let messageHintTimer;
+let messageHintHideTimer;
+let messageHintScheduled = false;
 function startHeroSlideshow() {
   clearInterval(heroSlideTimer);
   const isMobile = window.matchMedia("(max-width: 620px)").matches;
-  const mobileSlides = heroSlides.flatMap((slide) => slide.images);
+  const mobileSlides = heroSlides.flatMap((slide) => slide.images.map((image) => ({ image, copy: slide })));
   if (isMobile) {
     const mobileGallery = document.querySelector(".hero-gallery");
     const mobileImage = mobileGallery?.querySelector("img");
-    if (mobileImage) mobileImage.src = mobileSlides[activeMobileHeroSlide];
+    if (mobileImage) mobileImage.src = mobileSlides[activeMobileHeroSlide].image;
+    updateHeroCopy(mobileSlides[activeMobileHeroSlide].copy);
+  } else {
+    const gallery = document.querySelector(".hero-gallery");
+    const images = gallery?.querySelectorAll("img");
+    if (images && images.length === 3) {
+      heroSlides[activeHeroSlide].images.forEach((source, index) => {
+        images[index].src = source;
+      });
+    }
+    updateHeroCopy(heroSlides[activeHeroSlide]);
   }
   heroSlideTimer = setInterval(() => {
     const gallery = document.querySelector(".hero-gallery");
@@ -261,8 +276,8 @@ function startHeroSlideshow() {
 
     if (window.matchMedia("(max-width: 620px)").matches) {
       activeMobileHeroSlide = (activeMobileHeroSlide + 1) % mobileSlides.length;
-      images[0].src = mobileSlides[activeMobileHeroSlide];
-      updateHeroCopy(heroSlides[activeMobileHeroSlide < 3 ? 0 : 1]);
+      images[0].src = mobileSlides[activeMobileHeroSlide].image;
+      updateHeroCopy(mobileSlides[activeMobileHeroSlide].copy);
       return;
     }
 
@@ -280,14 +295,25 @@ function updateHeroCopy(slide) {
   const eyebrow = copy.querySelectorAll(".eyebrow");
   const title = copy.querySelector("h1");
   const description = copy.querySelector("h1 + p");
-  if (eyebrow[0]) eyebrow[0].textContent = slide.eyebrow;
-  if (eyebrow[1]) eyebrow[1].textContent = slide.brand;
+  if (eyebrow[0]) eyebrow[0].textContent = translateText(slide.eyebrow);
+  if (eyebrow[1]) eyebrow[1].textContent = translateText(slide.brand);
   if (title) {
-    title.childNodes[0].nodeValue = slide.title;
+    title.childNodes[0].nodeValue = translateText(slide.title);
     const accent = title.querySelector("span");
-    if (accent) accent.textContent = slide.accent;
+    if (accent) accent.textContent = translateText(slide.accent);
   }
-  if (description) description.textContent = slide.description;
+  if (description) description.textContent = translateText(slide.description);
+}
+
+function scheduleMessageHint() {
+  if (messageHintScheduled) return;
+  messageHintScheduled = true;
+  messageHintTimer = setTimeout(() => {
+    const hint = document.querySelector(".whatsapp-hint");
+    if (!hint) return;
+    hint.classList.add("visible");
+    messageHintHideTimer = setTimeout(() => hint.classList.remove("visible"), 5000);
+  }, 30000);
 }
 
 function navigate(view) {
