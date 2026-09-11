@@ -67,6 +67,20 @@ body { background: var(--cream); }
   .hero-copy, .hero-copy > p:not(.eyebrow), .hero h1 { max-width: 100%; min-width: 0; }
 }
 
+/* Premium product showcase */
+.showcase-card { position: relative; overflow: hidden; min-height: 390px; border: 1px solid rgba(255,255,255,.62); background: #17252b; box-shadow: 0 18px 42px rgba(27,41,45,.12); text-align: center; }
+.showcase-card .product-image { position: absolute; inset: 0; height: 100%; background: #eef1ed; }
+.showcase-card .product-image img { object-fit: cover; }
+.showcase-card .product-image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,29,33,.05) 25%, rgba(15,29,33,.18) 45%, rgba(15,29,33,.92) 100%); }
+.showcase-card .category-pill { left: 50%; transform: translateX(-50%); }
+.showcase-card .product-body { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; display: flex; flex-direction: column; align-items: center; padding: 80px 22px 24px; color: white; }
+.showcase-card .product-meta { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+.showcase-card .product-meta h3 { margin-top: 0; color: white; font-size: 21px; }
+.showcase-card .stock { order: -1; border: 1px solid rgba(255,255,255,.45); background: rgba(255,255,255,.14); color: white; }
+.showcase-card .product-description { display: -webkit-box; min-height: 78px; margin: 15px auto 20px; overflow: hidden; max-width: 280px; color: rgba(255,255,255,.84); line-height: 1.65; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; }
+.showcase-card .button-full { width: min(100%, 220px); border-color: rgba(255,255,255,.58); background: rgba(255,255,255,.12); color: white; }
+.showcase-card .button-full:hover { border-color: white; background: rgba(255,255,255,.24); }
+
 /* Final WhatsApp button treatment */
 .floating-whatsapp { position: fixed; z-index: 95; right: 24px; bottom: 24px; display: inline-flex; align-items: center; justify-content: center; width: auto; min-width: 178px; height: 56px; padding: 0 20px; gap: 10px; border: 1px solid rgba(255,255,255,.72); border-radius: 10px; background: #173b35; color: #fff; box-shadow: 0 12px 28px rgba(23,59,53,.28); font-size: 13px; font-weight: 700; letter-spacing: .02em; }
 .floating-whatsapp:hover, .floating-whatsapp.active { background: #286552; transform: translateY(-2px); }
