@@ -21,6 +21,12 @@ const services = [
   ["⌁", "Entrega", "Apoio conveniente para levantamento e entrega de pedidos locais."],
 ];
 
+const bankAccounts = [
+  { bank: "Banco Milênio", account: "4101962871/0001", iban: "0055.0000.1019.6287.1018.4" },
+  { bank: "Banco BIC", account: "2412411877/10/1", iban: "0051.0000.4124.1187.1010.4" },
+];
+const web3FormsAccessKey = "2d021a09-c04f-485b-a8f1-ba6fd6541c47";
+
 const heroSlides = [
   { images: [`${imageBase}backgroud1.png`, `${imageBase}background2.jpg`, `${imageBase}backgroud3.png`], eyebrow: "Cuidado farmacêutico de confiança", brand: "Farmacia Camunda Central", title: "A sua saúde.", accent: "A nossa prioridade.", description: "Produtos de saúde e apoio profissional, disponíveis todos os dias para cuidar de toda a família." },
   { images: [`${imageBase}background4.png`, `${imageBase}background5.png`, `${imageBase}background6.png`], eyebrow: "Entregas em Angola", brand: "Saúde à sua porta", title: "Cuidamos de si.", accent: "Onde estiver.", description: "Entregas de porta em porta em Benguela, Lobito e Luanda, com atendimento próximo e seguro 24/7." },
@@ -43,8 +49,13 @@ const state = {
   payment: "Pagamento na entrega",
   order: null,
   deliveryCity: "",
+  checkoutDraft: readCheckoutDraft(),
+  receiptFile: null,
+  prescriptionFile: null,
+  submittingOrder: false,
   messageOpen: false,
 };
+state.deliveryCity = state.checkoutDraft.city || "";
 
 const app = document.querySelector("#app");
 const t = (key) => translations[state.language][key] || translations.pt[key] || key;
@@ -112,6 +123,18 @@ function deliveryFee(city) {
 function readLanguage() {
   const saved = localStorage.getItem("kamunda-language");
   return ["pt", "en", "fr"].includes(saved) ? saved : "pt";
+}
+function readCheckoutDraft() {
+  try {
+    const draft = JSON.parse(localStorage.getItem("camunda-checkout-draft") || "null");
+    if (draft?.expiresAt > Date.now()) return draft;
+    localStorage.removeItem("camunda-checkout-draft");
+  } catch { localStorage.removeItem("camunda-checkout-draft"); }
+  return { fullName: "", phone: "", email: "", address: "", city: "", expiresAt: 0 };
+}
+function saveCheckoutDraft() {
+  state.checkoutDraft.expiresAt = Date.now() + 30 * 60 * 1000;
+  localStorage.setItem("camunda-checkout-draft", JSON.stringify(state.checkoutDraft));
 }
 function readCart() {
   try { return JSON.parse(localStorage.getItem("camunda-central-cart") || "[]"); } catch { return []; }
@@ -211,9 +234,18 @@ function renderCart() {
 
 function summary(primary, action, delivery = 0) { return `<aside class="card summary"><p class="eyebrow">Resumo do pedido</p><h2>Total</h2><div style="margin-top:20px"><div class="summary-row"><span>Artigos</span><span>${cartCount()}</span></div><div class="summary-row"><span>Subtotal</span><span>${money(subtotal())}</span></div><div class="summary-row"><span>Entrega</span><span data-delivery-fee>${money(delivery)}</span></div><div class="summary-row summary-total"><span>Total</span><span data-order-total>${money(subtotal() + delivery)}</span></div></div>${button(primary, action, "button button-dark button-full")}${button(t("clear"), "clear-cart", "button button-outline button-full")}</aside>`; }
 
+function checkoutField(name, fallback = "") { return escapeHtml(state.checkoutDraft[name] || fallback); }
+function prescriptionUpload() {
+  const fileName = state.prescriptionFile ? escapeHtml(state.prescriptionFile.name) : "Escolher ficheiro";
+  return `<section class="prescription-upload"><p class="form-title">Receita médica</p><p>Envie uma foto da receita para o farmacêutico.</p><label class="file-picker" for="prescription-file"><span>${fileName}</span></label><input id="prescription-file" class="file-input" type="file" name="prescription" accept="image/*"><small>Após a compra ser confirmada, a imagem será encaminhada para o WhatsApp em 10 segundos.</small></section>`;
+}
+
 function renderCheckout() {
   if (state.order) return `<main class="page"><div class="card confirmation"><div class="confirm-icon">✓</div><p class="eyebrow" style="margin-top:30px">Pedido confirmado</p><h1>Obrigado pelo seu pedido</h1><p>O número do seu pedido é <strong>${state.order}</strong></p><p>Entraremos em contacto para confirmar os detalhes da entrega.</p>${button("Continuar a comprar →", "view:products", "button button-dark")}</div></main>`;
-  return `<main class="page"><div class="page-heading"><p class="eyebrow">Finalização</p><h1>Conclua o seu pedido</h1></div><div class="checkout-layout"><form class="card checkout-card" data-checkout><p class="form-title">Informações do cliente</p><div class="form-grid"><label class="form-group"><span>Nome completo</span><input name="fullName" required placeholder="O seu nome completo"></label><label class="form-group"><span>Número de telefone</span><input name="phone" required placeholder="O seu número de telefone"></label><label class="form-group full"><span>E-mail</span><input name="email" type="email" required placeholder="email@exemplo.com"></label><label class="form-group full"><span>Morada</span><input name="address" required placeholder="Morada"></label><label class="form-group full"><span>Cidade</span><input name="city" required placeholder="Luanda, Benguela ou Lobito" value="${escapeHtml(state.deliveryCity)}"><small class="delivery-note">Entrega na cidade: 3.000 Kz · Fora da cidade: 5.000 Kz</small></label></div><p class="form-title" style="margin-top:28px">Método de pagamento</p><div class="payment-grid">${["Pagamento na entrega", "Transferência bancária", "Pagamento móvel"].map((method) => `<button type="button" class="payment-option ${state.payment === method ? "selected" : ""}" data-payment="${method}">${method}</button>`).join("")}</div>${button("Concluir pedido →", "submit-checkout", "button button-dark button-full")}</form>${summary("Voltar ao carrinho", "view:cart", deliveryFee(state.deliveryCity))}</div></main>`;
+  const transferSelected = state.payment === "Transferência bancária";
+  const bankDetails = transferSelected ? `<section class="bank-details"><p class="form-title">FARMÁCIA CAMUNDA</p><h3>Nossos dados bancários</h3>${bankAccounts.map(({ bank, account, iban }) => `<div class="bank-account"><strong>${bank}</strong><span>Titular: A.C. Canuvelo – Comercio e Serviços (SU), LDA</span><span>Conta: ${account}</span><div class="iban-row"><span>IBAN: <strong>${iban}</strong></span><button type="button" class="copy-iban" data-copy-iban="${iban}">Copiar IBAN</button></div></div>`).join("")}<div class="form-group receipt-upload"><span>Comprovativo de transferência</span><label class="file-picker" for="receipt-file"><span>${state.receiptFile ? escapeHtml(state.receiptFile.name) : "Escolher ficheiro"}</span></label><input id="receipt-file" class="file-input" type="file" name="receipt" accept="image/*,.pdf" ${state.receiptFile ? "" : "required"}><small>${state.receiptFile ? "Ficheiro selecionado." : "Anexe o seu comprovativo para concluir."}</small><small>A Farmacia Camunda verificará minuciosamente a sua receita no ato da entrega dos medicamentos.</small></div></section>` : "";
+  const submitDisabled = state.submittingOrder || (transferSelected && !state.receiptFile);
+  return `<main class="page"><div class="page-heading"><p class="eyebrow">Finalização</p><h1>Conclua o seu pedido</h1></div><div class="checkout-layout"><form class="card checkout-card" data-checkout><p class="form-title">Informações do cliente</p><div class="form-grid"><label class="form-group"><span>Nome completo</span><input name="fullName" required placeholder="O seu nome completo" value="${checkoutField("fullName")}"></label><label class="form-group"><span>Número de telefone</span><input name="phone" required placeholder="O seu número de telefone" value="${checkoutField("phone")}"></label><label class="form-group full"><span>E-mail</span><input name="email" type="email" required placeholder="email@exemplo.com" value="${checkoutField("email")}"></label><label class="form-group full"><span>Morada</span><input name="address" required placeholder="Morada" value="${checkoutField("address")}"></label><label class="form-group full"><span>Cidade</span><input name="city" required placeholder="Luanda, Benguela ou Lobito" value="${checkoutField("city", state.deliveryCity)}"><small class="delivery-note">Entrega na cidade: 3.000 Kz · Fora da cidade: 5.000 Kz</small></label></div><p class="form-title" style="margin-top:28px">Método de pagamento</p><div class="payment-grid">${["Pagamento na entrega", "Transferência bancária"].map((method) => `<button type="button" class="payment-option ${state.payment === method ? "selected" : ""}" data-payment="${method}">${method}</button>`).join("")}</div>${bankDetails}${prescriptionUpload()}<button type="submit" class="button button-dark button-full" ${submitDisabled ? "disabled" : ""}>${state.submittingOrder ? "A enviar pedido..." : "Concluir pedido →"}</button></form>${summary("Voltar ao carrinho", "view:cart", deliveryFee(state.deliveryCity))}</div></main>`;
 }
 
 function renderServices() { return `<main class="page"><div class="page-heading"><p class="eyebrow">Apoio</p><h1>Serviços farmacêuticos</h1></div><div class="service-grid">${services.map(([icon, title, text]) => `<div class="card feature-card"><div class="service-icon">${icon}</div><h3>${title}</h3><p>${text}</p></div>`).join("")}</div></main>`; }
@@ -226,10 +258,10 @@ function renderDrawer() {
 }
 
 function renderMessagePanel() {
-  return `<div class="whatsapp-panel ${state.messageOpen ? "open" : ""}" role="dialog" aria-label="Enviar mensagem para a Farmacia Camunda Entregas"><div class="whatsapp-panel-head"><div><span class="whatsapp-status"></span><strong>Farmacia Camunda Entregas</strong><small>Resposta rápida · aberto 24/7</small></div><button type="button" class="whatsapp-close" data-action="close-message" aria-label="Fechar mensagem">×</button></div><form data-whatsapp-form><label for="whatsapp-message">Mensagem</label><textarea id="whatsapp-message" name="message" required placeholder="Olá, gostaria de fazer um pedido...">Olá, gostaria de fazer um pedido.</textarea><button type="submit" class="whatsapp-send">Escrever para o Gestor <span>↗</span></button><small class="whatsapp-contact">931 898 121 · Benguela · Lobito · Luanda</small></form></div><div class="whatsapp-hint" role="status" aria-live="polite">🧐 Precisa de orientação? Estamos aqui para ajudar.</div><button type="button" class="floating-whatsapp ${state.messageOpen ? "active" : ""}" data-action="toggle-message" aria-label="Enviar mensagem pelo WhatsApp"><span class="whatsapp-symbol">◔</span><span>Mensagem</span></button>`;
+  return `<div class="whatsapp-panel ${state.messageOpen ? "open" : ""}" role="dialog" aria-label="Enviar mensagem para a Farmacia Camunda Entregas"><div class="whatsapp-panel-head"><div><span class="whatsapp-status"></span><strong>Farmacia Camunda Entregas</strong><small>Resposta rápida · aberto 24/7</small></div><button type="button" class="whatsapp-close" data-action="close-message" aria-label="Fechar mensagem">×</button></div><form data-whatsapp-form><label for="whatsapp-message">Mensagem</label><textarea id="whatsapp-message" name="message" required placeholder="Olá, gostaria de fazer um pedido...">Olá, gostaria de fazer um pedido.</textarea><button type="submit" class="whatsapp-send">Falar com Farmacêutico <span>↗</span></button><small class="whatsapp-contact">931 898 121 · Benguela · Lobito · Luanda</small></form></div><div class="whatsapp-hint" role="status" aria-live="polite">🧐 Precisa de orientação? Estamos aqui para ajudar.</div><button type="button" class="floating-whatsapp ${state.messageOpen ? "active" : ""}" data-action="toggle-message" aria-label="Enviar mensagem pelo WhatsApp"><span class="whatsapp-symbol">◔</span><span>Mensagem</span></button>`;
 }
 
-function renderFooter() { return `<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>Farmacia Camunda Central</strong><p>Cuidados de saúde de confiança em Benguela e Luanda.</p></div><div class="footer-columns"><div><h4>Ligações rápidas</h4><button data-view="products">Produtos</button><button data-view="services">Serviços</button><button data-view="contact">Contacto</button></div><div><h4>Localização</h4><span>Benguela · Lobito · Luanda</span></div><div><h4>Redes sociais</h4><span>Instagram</span><span>Facebook</span><span>LinkedIn</span></div></div></div><div class="footer-bottom"><span>© 2026 Farmacia Camunda Central</span><span>Profissional. Próxima. De confiança.</span><button type="button" class="scroll-top-button" data-action="scroll-top">↑ Voltar ao topo</button></div></footer>`; }
+function renderFooter() { return `<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>Farmacia Camunda Central</strong><p>Cuidados de saúde de confiança em Benguela e Luanda.</p></div><div class="footer-columns"><div><h4>Ligações rápidas</h4><button data-view="products">Produtos</button><button data-view="services">Serviços</button><button data-view="contact">Contacto</button></div><div><h4>Localização</h4><span>Benguela · Lobito · Luanda</span></div><div><h4>Redes sociais</h4><span>Instagram</span><span>Facebook</span><span>LinkedIn</span></div></div></div><div class="footer-bottom"><div class="footer-legal"><img src="${imageBase}Ao%20servico%20daComunida.png" alt="Ao serviço da comunidade"><span>NIF: 500312260</span></div><span>© 2026 Farmacia Camunda Central</span><span>Profissional. Próxima. De confiança.</span><button type="button" class="scroll-top-button" data-action="scroll-top">↑ Voltar ao topo</button></div></footer>`; }
 
 function render() {
   document.documentElement.lang = state.language;
@@ -250,6 +282,8 @@ let activeMobileHeroSlide = 0;
 let messageHintTimer;
 let messageHintHideTimer;
 let messageHintScheduled = false;
+let prescriptionWhatsappTimer;
+let prescriptionWhatsappScheduled = false;
 function startHeroSlideshow() {
   clearInterval(heroSlideTimer);
   const isMobile = window.matchMedia("(max-width: 620px)").matches;
@@ -335,15 +369,72 @@ function updateQuantity(id, change) {
   if (item.quantity <= 0) state.cart = state.cart.filter((entry) => entry.id !== id);
   saveCart(); render();
 }
-function submitCheckout(form) {
-  if (!form.reportValidity()) return;
+async function submitCheckout(form) {
+  if (state.submittingOrder || !form.reportValidity()) return;
+  if (state.payment === "Transferência bancária" && !state.receiptFile) {
+    alert("Anexe o comprovativo de transferência antes de concluir o pedido.");
+    return;
+  }
   state.deliveryCity = form.elements.city.value.trim();
-  state.order = `KP-${Math.floor(Math.random() * 9000 + 1000)}`;
-  state.cart = []; saveCart(); render();
+  state.submittingOrder = true;
+  const orderNumber = `KP-${Math.floor(Math.random() * 9000 + 1000)}`;
+  const formData = new FormData(form);
+  formData.append("access_key", web3FormsAccessKey);
+  formData.append("subject", `Novo pedido ${orderNumber} - Farmacia Camunda Central`);
+  formData.append("order_number", orderNumber);
+  formData.append("payment_method", state.payment);
+  formData.append("order_items", cartProducts().map((product) => `${product.name} x${product.quantity} - ${money(product.price * product.quantity)}`).join(" | "));
+  formData.append("order_total", money(subtotal() + deliveryFee(state.deliveryCity)));
+  if (state.receiptFile) {
+    formData.delete("receipt");
+    formData.append("receipt_filename", state.receiptFile.name);
+    formData.append("receipt_notice", "Comprovativo selecionado no checkout; enviar pelo WhatsApp para validação.");
+  }
+  formData.delete("prescription");
+
+  try {
+    const response = await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
+    const data = await response.json();
+    if (!response.ok || !data.success) throw new Error(data.message || "Não foi possível enviar o pedido.");
+    state.order = orderNumber;
+    state.cart = [];
+    state.receiptFile = null;
+    localStorage.removeItem("camunda-checkout-draft");
+    saveCart();
+    render();
+    schedulePrescriptionWhatsApp();
+  } catch (error) {
+    state.submittingOrder = false;
+    alert(`Não foi possível enviar o pedido: ${error.message}`);
+    render();
+  }
+}
+
+function schedulePrescriptionWhatsApp() {
+  if (!state.prescriptionFile || prescriptionWhatsappScheduled) return;
+  prescriptionWhatsappScheduled = true;
+  prescriptionWhatsappTimer = setTimeout(() => {
+    sendPrescriptionToPharmacist(true);
+  }, 10000);
+}
+
+async function sendPrescriptionToPharmacist(autoOpen = false) {
+  if (!state.prescriptionFile) return;
+  const message = `Olá, sou ${state.checkoutDraft.fullName || "cliente da Farmácia Camunda"}. Vou enviar a foto da minha receita para análise do farmacêutico.`;
+  if (navigator.share && navigator.canShare?.({ files: [state.prescriptionFile] })) {
+    try {
+      await navigator.share({ title: "Receita médica", text: message, files: [state.prescriptionFile] });
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") return;
+    }
+  }
+  window.open(`https://wa.me/244931898121?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+  if (!autoOpen) alert("O WhatsApp foi aberto. Anexe a foto da receita na conversa com o farmacêutico.");
 }
 
 document.addEventListener("click", (event) => {
-  const target = event.target.closest("button, [data-action], [data-view], [data-language], [data-remove], [data-update], [data-quantity], [data-payment]");
+  const target = event.target.closest("button, [data-action], [data-view], [data-language], [data-remove], [data-update], [data-quantity], [data-payment], [data-copy-iban]");
   if (!target) return;
   if (target.dataset.view) return navigate(target.dataset.view);
   if (target.dataset.language) { state.language = target.dataset.language; localStorage.setItem("kamunda-language", state.language); render(); return; }
@@ -353,17 +444,53 @@ document.addEventListener("click", (event) => {
   if (target.dataset.action === "close-drawer") { state.drawer = false; render(); return; }
   if (target.dataset.action === "scroll-top") { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
   if (target.dataset.action === "clear-cart") { state.cart = []; saveCart(); render(); return; }
+  if (target.dataset.copyIban) {
+    const showCopied = () => {
+      const originalText = target.textContent;
+      target.textContent = "Copiado";
+      setTimeout(() => { target.textContent = originalText; }, 1600);
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(target.dataset.copyIban).then(showCopied).catch(() => {});
+    } else {
+      const helper = document.createElement("textarea");
+      helper.value = target.dataset.copyIban;
+      document.body.appendChild(helper);
+      helper.select();
+      document.execCommand("copy");
+      helper.remove();
+      showCopied();
+    }
+    return;
+  }
+  if (target.dataset.sendPrescription !== undefined) { sendPrescriptionToPharmacist(); return; }
   if (target.dataset.action?.startsWith("details:")) { state.selected = productById(target.dataset.action.split(":")[1]); state.quantity = 1; navigate("details"); return; }
   if (target.dataset.action?.startsWith("add:")) return addToCart(target.dataset.action.split(":")[1]);
   if (target.dataset.action?.startsWith("add-detail:")) return addToCart(target.dataset.action.split(":")[1], state.quantity);
   if (target.dataset.quantity) { state.quantity = Math.max(1, state.quantity + (target.dataset.quantity === "+" ? 1 : -1)); render(); return; }
   if (target.dataset.remove) { state.cart = state.cart.filter((item) => item.id !== target.dataset.remove); saveCart(); render(); return; }
   if (target.dataset.update) { const [id, change] = target.dataset.update.split(":"); updateQuantity(id, change === "+" ? 1 : -1); return; }
-  if (target.dataset.payment) { state.payment = target.dataset.payment; render(); return; }
-  if (target.dataset.action === "submit-checkout") { submitCheckout(target.closest("form")); }
+  if (target.dataset.payment) { state.payment = target.dataset.payment; if (state.payment !== "Transferência bancária") state.receiptFile = null; render(); return; }
+});
+
+document.addEventListener("change", (event) => {
+  if (event.target.matches("[name=receipt]")) {
+    state.receiptFile = event.target.files?.[0] || null;
+    render();
+    return;
+  }
+  if (event.target.matches("[name=prescription]")) {
+    state.prescriptionFile = event.target.files?.[0] || null;
+    render();
+    return;
+  }
 });
 
 document.addEventListener("input", (event) => {
+  if (["fullName", "phone", "email", "address", "city"].includes(event.target.name)) {
+    state.checkoutDraft[event.target.name] = event.target.value;
+    saveCheckoutDraft();
+  }
   if (event.target.matches("[name=city]")) {
     state.deliveryCity = event.target.value;
     const fee = deliveryFee(state.deliveryCity);
