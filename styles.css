@@ -118,7 +118,7 @@ body { background: var(--cream); }
 }
 .hero { min-height: 610px; border-radius: 0; }
 .hero-gallery { gap: 1px; }
-.hero-gallery::after { background: linear-gradient(90deg, rgba(15,29,33,.82), rgba(15,29,33,.34) 62%, rgba(15,29,33,.18)); }
+.hero-gallery::after { background: linear-gradient(90deg, rgba(15,23,42,.62), rgba(15,23,42,.22) 55%, rgba(15,23,42,.42)); }
 .hero-inner { max-width: 1480px; padding: 92px 56px 64px; }
 .hero h1 { max-width: 720px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(44px, 5.6vw, 82px); font-weight: 400; letter-spacing: -.05em; }
 .hero h1 span { color: #d6c39e; }
@@ -212,8 +212,8 @@ img { display: block; max-width: 100%; }
 
 .hero { position: relative; display: flex; align-items: end; min-height: 630px; overflow: hidden; border-radius: 0 0 34px 34px; background: #33434a; color: white; }
 .hero-gallery { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; background: #33434a; }
-.hero-gallery::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,23,42,.78), rgba(15,23,42,.25) 55%, rgba(15,23,42,.5)); }
-.hero-gallery img { width: 100%; height: 100%; min-width: 0; object-fit: cover; filter: saturate(.75); }
+.hero-gallery::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,23,42,.62), rgba(15,23,42,.22) 55%, rgba(15,23,42,.42)); pointer-events: none; }
+.hero-gallery img { width: 100%; height: 100%; min-width: 0; object-fit: cover; filter: none; }
 .hero-gallery img:first-child { object-position: center; }
 .hero-gallery { transition: none; }
 .hero-gallery.slide-changing { opacity: 1; }
@@ -379,8 +379,19 @@ img { display: block; max-width: 100%; }
 .drawer-item-main { flex: 1; min-width: 0; }
 .drawer-footer { padding-top: 17px; border-top: 1px solid var(--line); }
 .floating-whatsapp { position: fixed; z-index: 45; right: 20px; bottom: 28px; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: #10b981; color: white; box-shadow: 0 16px 40px rgba(16,185,129,.35); font-size: 24px; transition: opacity .35s ease, transform .35s ease; }
+.whatsapp-hint { position: fixed; z-index: 94; right: 24px; bottom: 164px; max-width: min(270px, calc(100vw - 48px)); padding: 11px 15px; border: 1px solid rgba(185,154,99,.35); border-radius: 12px; background: rgba(255,254,250,.96); color: var(--luxury-ink); box-shadow: 0 14px 34px rgba(23,37,43,.14); font-size: 12px; font-weight: 600; letter-spacing: .01em; opacity: 0; pointer-events: none; transform: translateY(8px) scale(.97); transform-origin: bottom right; transition: opacity .45s ease, transform .45s cubic-bezier(.22,1,.36,1); }
+.whatsapp-hint::after { position: absolute; right: 22px; bottom: -6px; width: 10px; height: 10px; border-right: 1px solid rgba(185,154,99,.35); border-bottom: 1px solid rgba(185,154,99,.35); background: rgba(255,254,250,.96); content: ""; transform: rotate(45deg); }
+.whatsapp-hint.visible { opacity: 1; transform: translateY(0) scale(1); }
 .sidebar nav, .sidebar-bottom { transition: opacity .35s ease, transform .35s ease; }
 .mobile-nav { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-hint { transition: opacity .2s ease; transform: none; }
+}
+
+@media (max-width: 620px) {
+  .whatsapp-hint { right: 16px; bottom: 158px; max-width: calc(100vw - 32px); }
+}
 
 /* Premium storefront treatment */
 :root {
@@ -481,8 +492,8 @@ img { display: block; max-width: 100%; }
   .mobile-nav .cart-badge { right: 22%; top: 2px; }
 }
 @media (max-width: 620px) {
-  .site-logo { top: -18px; left: 48px; width: 124px; height: 124px; }
-  .language-switcher { top: 10px; right: 10px; }
+  .site-logo { top: -78px; left: 8px; width: 210px; height: 210px; }
+  .language-switcher { top: 18px; right: 10px; }
   .hero h1 { font-size: 46px; }
   .hero-gallery { grid-template-columns: 1fr; }
   .hero-gallery img { display: none; }
@@ -517,7 +528,7 @@ body { background: var(--cream); }
 .content-wrap { padding-left: 104px; }
 .hero { min-height: 610px; border-radius: 0; }
 .hero-gallery { gap: 1px; }
-.hero-gallery::after { background: linear-gradient(90deg, rgba(15,29,33,.82), rgba(15,29,33,.34) 62%, rgba(15,29,33,.18)); }
+.hero-gallery::after { background: linear-gradient(90deg, rgba(15,23,42,.62), rgba(15,23,42,.22) 55%, rgba(15,23,42,.42)); }
 .hero-inner { max-width: 1480px; padding: 92px 56px 64px; }
 .hero h1 { max-width: 720px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(44px, 5.6vw, 82px); font-weight: 400; letter-spacing: -.05em; }
 .hero h1 span { color: #d6c39e; }
