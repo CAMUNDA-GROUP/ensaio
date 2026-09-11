@@ -128,9 +128,11 @@ function renderLanguage() { return `<div class="language-switcher" aria-label="E
 function renderHeaderLogo() { return `<a class="site-logo" href="#" data-view="home" aria-label="Farmacia Camunda Central"><img src="${imageBase}logo2.png" alt="Farmacia Camunda Central"></a>`; }
 function button(label, action, className = "button button-dark") { return `<button type="button" class="${className}" data-action="${action}">${label}</button>`; }
 
-function productCard(product) {
+function productCard(product, showcase = state.view === "home") {
+  if (typeof showcase !== "boolean") showcase = state.view === "home";
   const image = product.image;
-  return `<article class="card product-card" data-product-id="${product.id}"><div class="product-image"><img src="${image}" alt="${escapeHtml(product.name)}" data-product-image ${imageFallback(product.image)}><span class="category-pill">${escapeHtml(product.category)}</span></div><div class="product-body"><div class="product-meta"><div><h3>${escapeHtml(product.name)}</h3></div><span class="stock">${product.stock > 0 ? t("inStock") : t("lowStock")}</span></div><p class="product-description">${escapeHtml(medicationDescription(product.name))}</p><div class="product-bottom"><div><p class="price-label">${t("price")}</p><p class="price">${money(product.price)}</p></div>${button(t("details"), `details:${product.id}`, "button button-outline")}</div>${button(`🛒 ${t("add")}`, `add:${product.id}`, "button button-dark button-full")}</div></article>`;
+  const showcaseContent = showcase ? button(t("details"), `details:${product.id}`, "button button-outline button-full") : `<div class="product-bottom"><div><p class="price-label">${t("price")}</p><p class="price">${money(product.price)}</p></div>${button(t("details"), `details:${product.id}`, "button button-outline")}</div>${button(`🛒 ${t("add")}`, `add:${product.id}`, "button button-dark button-full")}`;
+  return `<article class="card product-card ${showcase ? "showcase-card" : ""}" data-product-id="${product.id}"><div class="product-image"><img src="${image}" alt="${escapeHtml(product.name)}" data-product-image ${imageFallback(product.image)}><span class="category-pill">${escapeHtml(product.category)}</span></div><div class="product-body"><div class="product-meta"><div><h3>${escapeHtml(product.name)}</h3></div><span class="stock">${product.stock > 0 ? t("inStock") : t("lowStock")}</span></div><p class="product-description">${escapeHtml(medicationDescription(product.name))}</p>${showcaseContent}</div></article>`;
 }
 
 function productListItem(product) {
