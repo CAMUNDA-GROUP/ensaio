@@ -348,6 +348,25 @@ img { display: block; max-width: 100%; }
 .payment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 26px; }
 .payment-option { padding: 12px 10px; border: 1px solid var(--line); border-radius: 15px; background: var(--soft); color: #475569; font-size: 12px; font-weight: 600; }
 .payment-option.selected { border-color: var(--ink); background: var(--ink); color: white; }
+.bank-details { margin-top: 22px; padding: 20px; border: 1px solid rgba(185,154,99,.4); border-radius: 12px; background: linear-gradient(145deg, #fffefa, #f6f1e7); }
+.bank-details h3 { margin: 0 0 18px; color: var(--luxury-ink); font-size: 19px; }
+.bank-account { display: grid; gap: 5px; padding: 14px 0; border-top: 1px solid rgba(185,154,99,.22); color: var(--muted); font-size: 12px; }
+.bank-account strong { color: var(--luxury-ink); }
+.iban-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.copy-iban { flex: 0 0 auto; padding: 7px 10px; border: 1px solid var(--luxury-gold); border-radius: 6px; background: white; color: var(--luxury-ink); font-size: 11px; font-weight: 700; }
+.copy-iban:hover { background: var(--luxury-gold-soft); }
+.receipt-upload { margin-top: 16px; }
+.receipt-upload input { height: auto; padding: 10px; }
+.receipt-upload small { color: var(--muted); font-size: 11px; }
+.checkout-card button[type="submit"]:disabled { cursor: not-allowed; opacity: .5; }
+.file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; clip-path: inset(50%); }
+.file-picker { display: flex; align-items: center; min-height: 46px; padding: 0 14px; border: 1px solid var(--line); border-radius: 15px; background: var(--soft); color: var(--ink); cursor: pointer; font-size: 12px; }
+.file-picker:hover { border-color: var(--luxury-gold); background: white; }
+.prescription-upload { display: grid; gap: 9px; margin-top: 22px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--soft); }
+.prescription-upload .form-title { margin: 0; }
+.prescription-upload p { margin: 0; color: var(--muted); font-size: 12px; }
+.prescription-upload small { color: var(--muted); font-size: 11px; }
+.prescription-upload button:disabled { cursor: not-allowed; opacity: .5; }
 .confirmation { max-width: 760px; margin: 0 auto; padding: 42px; text-align: center; }
 .confirm-icon { display: grid; place-items: center; width: 72px; height: 72px; margin: 0 auto; border-radius: 50%; background: #ecfdf5; color: #059669; font-size: 32px; }
 .confirmation h1 { margin: 16px 0 0; font-size: 42px; letter-spacing: -.04em; }
@@ -362,6 +381,8 @@ img { display: block; max-width: 100%; }
 .footer-columns h4 { margin: 0 0 12px; color: #64748b; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
 .footer-columns button { display: block; padding: 4px 0; border: 0; background: transparent; color: inherit; text-align: left; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; max-width: 1360px; margin: 26px auto 0; padding-top: 18px; border-top: 1px solid var(--line); color: #94a3b8; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.footer-legal { display: flex; align-items: center; gap: 10px; min-width: 180px; color: var(--muted); letter-spacing: .08em; white-space: nowrap; }
+.footer-legal img { width: 112px; height: 58px; object-fit: contain; }
 .scroll-top-button { border: 1px solid var(--line); border-radius: 999px; padding: 8px 13px; background: white; color: var(--ink); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; transition: .2s ease; }
 .scroll-top-button:hover { background: var(--ink); color: white; }
 
@@ -514,6 +535,8 @@ img { display: block; max-width: 100%; }
   .footer-bottom { display: block; line-height: 1.8; }
   .footer-bottom span { display: block; }
   .footer-bottom span + span { margin-top: 8px; }
+  .footer-legal { margin-bottom: 12px; }
+  .footer-legal img { width: 128px; height: 66px; }
   .cart-item { padding: 14px; }
   .cart-thumb { width: 78px; height: 78px; }
   .cart-item-bottom { align-items: start; flex-direction: column; }
